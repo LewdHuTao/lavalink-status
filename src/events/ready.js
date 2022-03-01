@@ -1,5 +1,5 @@
 const { Embed, Util } = require("discord.js");
-const config = require("../config.json");
+const config = require("../config.js");
 const moment = require("moment");
 require("moment-duration-format");
 const prettyBytes = require("pretty-bytes");
@@ -44,8 +44,8 @@ module.exports = async (client) => {
             const rembed = new Embed()
                 .setColor(Util.resolveColor("#2F3136"))
                 .setAuthor({
-                    name: "Shittybot Lavalink Status",
-                    iconURL: client.user.displayAvatarURL({ dynamic: true }),
+                    name: `${client.user.username} Lavalink Status`,
+                    iconURL: client.user.displayAvatarURL({ forceStatic: false }),
                 })
                 .setDescription(`\`\`\`diff\n${all.join("\n\n")}\`\`\``)
                 .setFooter({
@@ -58,6 +58,15 @@ module.exports = async (client) => {
     })
 
     client.manager.init(client.user.id);
-    console.log(colors.green(`[CLIENT] Successfully Logged In As ${client.user.username}`));
+    client.user.setPresence({
+        status: "online",
+        activities: [
+            {
+                name: "Monitoring Lavalink Status",
+                ActivityType: "PLAYING"
+            }
+        ]
+    })
 
+    console.log(colors.green(`[CLIENT] ${client.user.username} is now Online!`));
 } 
