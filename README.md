@@ -1,4 +1,4 @@
-## Lavalink Satus
+## Lavalink-Satus
 
 ## System Requirement:
 - Discord.js Version 14
