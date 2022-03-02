@@ -12,7 +12,7 @@ module.exports = async (client) => {
         .setColor(Util.resolveColor("#2F3136"))
         .setDescription("Fetching Stats From Lavalink")
 
-    channel.bulkDelete(2);
+    channel.bulkDelete(1);
     channel.send({ embeds: [embed] }).then((msg) => {
 
         setInterval(() => {
