@@ -9,9 +9,9 @@
 ```
 git clone https://github.com/LewdHuTao/Lavalink-Status.git
 ```
-  After that run to install all require packages
+  After that run
   ```
-npm i
+npm i // To install all require packages
 ```
   Start bot with
 ```
