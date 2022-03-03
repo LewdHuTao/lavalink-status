@@ -1,4 +1,4 @@
-const { Embed, Util } = require("discord.js");
+const { Embed, Util, ActivityType } = require("discord.js");
 const config = require("../config.js");
 const moment = require("moment");
 require("moment-duration-format");
@@ -62,8 +62,8 @@ module.exports = async (client) => {
         status: "online",
         activities: [
             {
-                name: "Monitoring Lavalink Status",
-                ActivityType: "PLAYING"
+                name: "Lavalink Status",
+                type:  ActivityType.Watching
             }
         ]
     })
