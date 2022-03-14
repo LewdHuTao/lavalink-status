@@ -106,6 +106,7 @@ dist
 
 # Etc
 dev-config.js
+node_modules
 db.json
 yarn.lock
 package-lock.json
