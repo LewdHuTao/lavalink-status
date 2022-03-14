@@ -1,8 +1,8 @@
 {
   "name": "lavalink-status",
   "version": "1.0.0",
-  "description": "<h1 align=\"center\"><width=\"30px\"> Lavalink Status <width=\"30px\"></h1>",
-  "main": "index.js",
+  "description": "Monitor your lavalink",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -15,5 +15,10 @@
   "bugs": {
     "url": "https://github.com/LewdHuTao/Lavalink-Status/issues"
   },
-  "homepage": "https://github.com/LewdHuTao/Lavalink-Status#readme"
+  "homepage": "https://github.com/LewdHuTao/Lavalink-Status#readme",
+  "dependencies": {
+    "colors": "^1.4.0",
+    "discord.js": "^14.0.0-dev.1647216471.87a6b84",
+    "erela.js": "^2.3.3"
+  }
 }
