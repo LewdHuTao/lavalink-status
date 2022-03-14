@@ -8,24 +8,24 @@ module.exports = {
             password: "",
             port: 443,
             retryDelay: 300000,
-            identifier: "Node-01",
-            secure: false
+            identifier: "",
+            secure: true
         },
         {
             host: "",
             password: "",
             port: 443,
             retryDelay: 300000,
-            identifier: "Node-02",
-            secure: false
+            identifier: "",
+            secure: true
         },
         {
             host: "",
             password: "",
             port: 443,
             retryDelay: 300000,
-            identifier: "Node-03",
-            secure: false
+            identifier: "",
+            secure: true
         }
     ]
-}
+} 
