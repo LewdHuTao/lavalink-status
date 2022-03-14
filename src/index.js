@@ -12,11 +12,11 @@ const client = new Client({
 
 process.on("unhandledRejection", (error) => {
   return;
-  // console.log(error)
+  // console.log(error) Either you want to log the error or not
 });
 process.on("uncaughtException", (error) => {
   return;
-  // console.log(error)
+  // console.log(error) Either you want to log the error or not
 });
 
 client.manager = new Manager({
