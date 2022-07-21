@@ -1,4 +1,4 @@
-const { EmbedBuilder, Util, ActivityType } = require("discord.js");
+const { EmbedBuilder, resolveColor, ActivityType } = require("discord.js");
 const config = require("../config.js");
 const moment = require("moment");
 require("moment-duration-format");
@@ -8,7 +8,7 @@ const colors = require("colors");
 module.exports = async (client) => {
   const channel = await client.channels.fetch(config.channel);
   const embed = new EmbedBuilder()
-    .setColor(Util.resolveColor("#2F3136"))
+    .setColor(resolveColor("#2F3136"))
     .setDescription("Fetching Stats From Lavalink");
 
   channel.bulkDelete(1);
@@ -35,7 +35,7 @@ module.exports = async (client) => {
         all.push(info.join("\n"));});
 
       const rembed = new EmbedBuilder()
-        .setColor(Util.resolveColor("#2F3136"))
+        .setColor(resolveColor("#2F3136"))
         .setAuthor({
           name: `${client.user.username} Lavalink Status`,
           iconURL: client.user.displayAvatarURL({ forceStatic: false }),

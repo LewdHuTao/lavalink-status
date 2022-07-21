@@ -109,4 +109,5 @@ dev-config.js
 node_modules
 db.json
 yarn.lock
+.cmd
 package-lock.json

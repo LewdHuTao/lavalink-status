@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits } = require("discord.js");
+const { Client, GatewayIntentBits, Partials } = require("discord.js");
 const { readdirSync } = require("fs");
 const { Manager } = require("erela.js");
 const { token, nodes, retryDelay, retryAmount } = require("./config");
@@ -6,12 +6,13 @@ const colors = require("colors");
 
 const client = new Client({
   disableMentions: "everyone",
-  partials: ["MESSAGE", "CHANNEL", "REACTION"],
+  partials: [Partials.Channel, Partials.Message],
   intents: [GatewayIntentBits.Guilds],
 });
 
 process.on("unhandledRejection", (error) => {
   console.log(error);
+});
 process.on("uncaughtException", (error) => {
   console.log(error);
 });
