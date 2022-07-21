@@ -20,6 +20,6 @@
     "erela.js": "^2.3.3",
     "moment": "^2.29.1",
     "moment-duration-format": "^2.3.2",
-    "pretty-bytes": "^5.6.0"
+    "pretty-bytes": "^6.0.0"
   }
 }
