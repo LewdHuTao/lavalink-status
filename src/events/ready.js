@@ -5,6 +5,12 @@ require("moment-duration-format");
 const prettyBytes = require("pretty-bytes");
 const colors = require("colors");
 
+const arrayChunker = (array, chunkSize = 5) => {
+    let chunks = [];
+    for (let i = 0; i < array.length; i += chunkSize) chunks.push(array.slice(i, i + chunkSize));
+    return chunks;
+}
+
 module.exports = async (client) => {
   const channel = await client.channels.fetch(config.channel);
   const embed = new EmbedBuilder()
@@ -32,21 +38,28 @@ module.exports = async (client) => {
         info.push(`${color} Memory Usage  :: ${prettyBytes(node.stats.memory.used)}/${prettyBytes(node.stats.memory.reservable)}`);
         info.push(`${color} System Load   :: ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`);
         info.push(`${color} Lavalink Load :: ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`);
-        all.push(info.join("\n"));});
+        all.push(info.join("\n"));
+      });
+        
+      const chunked = arrayChunker(all, 8);
+      const statusembeds = [];
 
-      const rembed = new EmbedBuilder()
-        .setColor(resolveColor("#2F3136"))
-        .setAuthor({
+      chunked.forEach(data => {
+        const rembed = new EmbedBuilder()
+      	.setColor(resolveColor("#2F3136"))
+      	.setAuthor({
           name: `${client.user.username} Lavalink Status`,
           iconURL: client.user.displayAvatarURL({ forceStatic: false }),
-        })
-        .setDescription(`\`\`\`diff\n${all.join("\n\n")}\`\`\``)
-        .setFooter({
-          text: "Last Update",
-        })
-        .setTimestamp(Date.now());
+      	})
+      	.setDescription(`\`\`\`diff\n${data.join("\n\n")}\`\`\``)
+      	.setFooter({
+      	  text: "Last Update",
+      	})
+      	.setTimestamp(Date.now());
+      	statusembeds.push(rembed)
+      })
 
-      msg.edit({ embeds: [rembed] });
+      msg.edit({ embeds: statusembeds });
     }, 60000);
   });
 
