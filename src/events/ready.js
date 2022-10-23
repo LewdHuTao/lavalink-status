@@ -48,7 +48,7 @@ module.exports = async (client) => {
         const rembed = new EmbedBuilder()
       	.setColor(resolveColor("#2F3136"))
       	.setAuthor({
-          name: `${client.user.username} Lavalink Status`,
+          name: `Monitoring Lavalink Status`,
           iconURL: client.user.displayAvatarURL({ forceStatic: false }),
       	})
       	.setDescription(`\`\`\`diff\n${data.join("\n\n")}\`\`\``)
