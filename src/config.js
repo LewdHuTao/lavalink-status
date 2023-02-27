@@ -1,6 +1,6 @@
 module.exports = {
-  token: "Bot Token",
-  channel: "ChannelId",
+  token: process.env.token || "", // Your bot token
+  channelId: process.env.channelId || "", //Channel Id you want to send the message
 
   nodes: [
     {
