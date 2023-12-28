@@ -1,9 +1,8 @@
 const { EmbedBuilder, resolveColor, ActivityType } = require("discord.js");
-const config = require("../config.js");
+const config = require("../config-dev.js");
 const moment = require("moment");
 require("moment-duration-format");
 const colors = require("colors");
-
 const arrayChunker = (array, chunkSize = 5) => {
   let chunks = [];
   for (let i = 0; i < array.length; i += chunkSize)
@@ -20,17 +19,17 @@ module.exports = async (client) => {
 
   channel.bulkDelete(1);
   channel.send({ embeds: [embed] }).then((msg) => {
-    setInterval(() => {
+    setInterval(async () => {
       let all = [];
 
-      client.manager.nodes.forEach((node) => {
+      client.manager.nodesMap.forEach(async (node) => {
         let color;
 
         if (!node.connected) color = "-";
         else color = "+";
 
         let info = [];
-        info.push(`${color} Node          :: ${node.options.identifier}`);
+        info.push(`${color} Node          :: ${node.identifier}`);
         info.push(
           `${color} Status        :: ${
             node.connected ? "Connected [🟢]" : "Disconnected [🔴]"
@@ -84,7 +83,6 @@ module.exports = async (client) => {
     }, 60000);
   });
 
-  client.manager.init(client.user.id);
   client.user.setPresence({
     status: "online",
     activities: [

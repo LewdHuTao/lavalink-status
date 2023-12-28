@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, Partials } = require("discord.js");
 const { readdirSync } = require("fs");
-const { Manager } = require("erela.js");
-const { token, nodes, retryDelay, retryAmount } = require("./config");
+const Manager = require("./wrapper/index");
+const { token, nodes } = require("./config-dev");
 const colors = require("colors");
 
 const client = new Client({
@@ -17,36 +17,9 @@ process.on("uncaughtException", (error) => {
   console.log(error);
 });
 
-client.manager = new Manager({
+client.manager = new Manager(client, {
   nodes,
-  retryDelay,
-  retryAmount,
-  send: (id, payload) => {
-    const guild = client.guilds.cache.get(id);
-    if (guild) guild.shard.send(payload);
-  },
-})
-  .on("nodeConnect", (node) =>
-    console.log(
-      colors.green(
-        `[NODE] ${node.options.identifier} | Lavalink node is connected.`
-      )
-    )
-  )
-  .on("nodeReconnect", (node) =>
-    console.log(
-      colors.green(
-        `[NODE] ${node.options.identifier} | Lavalink node is reconnecting.`
-      )
-    )
-  )
-  .on("nodeDisconnect", (node) =>
-    console.log(
-      colors.green(
-        `[NODE] ${node.options.identifier} | Lavalink node is disconnected.`
-      )
-    )
-  );
+});
 
 readdirSync("./src/events/").forEach((file) => {
   const event = require(`./events/${file}`);
