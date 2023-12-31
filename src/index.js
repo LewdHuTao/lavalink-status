@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, Partials } = require("discord.js");
 const { readdirSync } = require("fs");
 const Manager = require("./wrapper/index");
-const { token, nodes } = require("./config-dev");
+const { token, nodes } = require("./config");
 const colors = require("colors");
 
 const client = new Client({
