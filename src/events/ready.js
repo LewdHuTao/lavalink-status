@@ -1,5 +1,5 @@
 const { EmbedBuilder, resolveColor, ActivityType } = require("discord.js");
-const config = require("../config-dev.js");
+const config = require("../config");
 const moment = require("moment");
 require("moment-duration-format");
 const colors = require("colors");
