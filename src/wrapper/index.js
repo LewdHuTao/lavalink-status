@@ -12,7 +12,7 @@ class LavalinkWrapper {
   connectToLavalink() {
     for (const nodeOptions of this.nodes) {
       const node = new Node(nodeOptions);
-      this.nodesMap.set(node.name, node);
+      node.storeNode(this.nodesMap);
       node.connect();
     }
   }

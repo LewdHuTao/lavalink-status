@@ -7,14 +7,19 @@ class Node {
     this.port = options.port || 2333;
     this.password = options.password || "youshallnotpass";
     this.secure = options.secure || false;
-    this.identifier = options.name || this.host;
-
+    this.identifier = options.identifier || this.host;
+    this.nodesMap = null;
     this.ws = null;
     this.connected = false;
     this.stats = {};
     this.reconnectTimeout = options.reconnectTimeout || 5000;
     this.reconnectTries = options.reconnectTries || 3;
     this.reconnectAttempted = 0;
+  }
+
+  storeNode(nodesMap) {
+    this.nodesMap = nodesMap;
+    this.nodesMap.set(this.identifier, this);
   }
 
   connect() {
