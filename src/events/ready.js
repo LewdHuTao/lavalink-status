@@ -3,6 +3,7 @@ const config = require("../config");
 const moment = require("moment");
 require("moment-duration-format");
 const colors = require("colors");
+
 const arrayChunker = (array, chunkSize = 5) => {
   let chunks = [];
   for (let i = 0; i < array.length; i += chunkSize)
@@ -36,11 +37,11 @@ module.exports = async (client) => {
           }`
         );
         info.push(`${color} Player        :: ${node.stats.players}`);
-        info.push(`${color} Used Player   :: ${node.stats.playingPlayers}`);
+        info.push(`${color} Active Player   :: ${node.stats.playingPlayers}`);
         info.push(
           `${color} Uptime        :: ${moment
             .duration(node.stats.uptime)
-            .format(" d [days], h [hours], m [minutes], s [seconds]")}`
+            .format(" d [days], h [hours], m [minutes]")}`
         );
         info.push(`${color} Cores         :: ${node.stats.cpu.cores} Core(s)`);
         info.push(
