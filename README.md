@@ -1,21 +1,51 @@
 <h1 align="center">Lavalink Status</h1>
 
-<strong><p align="center">Note: This branch supports only Lavalink v4. Switch to the [v3-legacy](https://github.com/shittybot/lavalink-status/tree/v3-legacy) branch for Lavalink v3.</p>
+<p align="center"><strong>Note:</strong> This branch supports only Lavalink v4. Lavalink v3 no longer maintained so please update your Lavalink</p>
 
-## Installation Guide (Windows/VPS/Pterodactyl)
+## Installation Guide
 
-- Ensure that you're using NodeJS v18 or later.
-- Clone the repository or download the ZIP file: `git clone https://github.com/LewdHuTao/Lavalink-Status.git`.
-- Fill the [config.js](https://github.com/LewdHuTao/Lavalink-Status/blob/main/src/config.js) file with your Bot Token and Channel ID where you want to send the status.
-- Run `npm install` or `yarn install` in the console to install all required packages.
-- Start the bot with `node .`, `npm run start`, or `yarn start`.
-- If you encounter any issues or the code doesn't work, please [create an issue](https://github.com/LewdHuTao/Lavalink-Status/issues).
+1. **Ensure NodeJS v18 or Later**:
+    - Make sure your NodeJS version is 18 or later.
 
-## Installation Guide (Replit)
+2. **Clone the Repository**:
+    - Clone the repository or download the ZIP file:
+    ```sh
+    git clone https://github.com/LewdHuTao/Lavalink-Status.git
+    ```
 
-- Clone this repo when you create a new Replit project: `git clone https://github.com/LewdHuTao/Lavalink-Status.git`.
-- Ensure that your Replit container is using at least NodeJS v18 or later.
-- Fill the [config.js](https://github.com/LewdHuTao/Lavalink-Status/blob/main/src/config.js) file with your Bot Token and Channel ID where you want to send the status.
-- Run `npm install` or `yarn install` in the console/shell to install all required packages.
-- Click the `Run` button to start the bot or run `node .`, `npm run start`, or `yarn start` (select one only) in the console/shell to start the bot.
-- If you encounter any issues or the code doesn't work, please [create an issue](https://github.com/LewdHuTao/Lavalink-Status/issues).
+3. **Configure the Bot**:
+    - Fill in the [config.js](https://github.com/LewdHuTao/Lavalink-Status/blob/main/src/config.js) file with your Lavalink Setting, Bot Token, and Channel ID where you want to send the status updates.
+
+4. **Install Required Packages**:
+    - Run the following command in your console:
+    ```sh
+    npm install
+    ## or
+    yarn install
+    ```
+
+5. **Start the Bot**:
+    - Use one of the following commands to start the bot:
+    ```sh
+    npm run start
+    ## or
+    node .
+    ```
+
+6. **Report Issue**:
+    - If you encounter any issues or the code doesn’t work, please [create an issue](https://github.com/LewdHuTao/Lavalink-Status/issues).
+
+## Web Monitor
+
+1. **Enable Web Monitor**:
+    - Set `webMonitor` to `true` in the [config.js](https://github.com/LewdHuTao/Lavalink-Status/blob/main/src/config.js) file.
+
+2. **Access the Web Monitor**:
+    - Open your browser and navigate to `http://localhost:3000`.
+
+3. **Custom Domain**:
+    - You can use a custom domain and set it up using services like ngrok, Cloudflare Tunnel or whatever service you like that can asign custom domain.
+
+### Web Monitor Preview
+
+![Web Monitor Preview](assets/image.png)
