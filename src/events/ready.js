@@ -22,6 +22,7 @@ module.exports = async (client) => {
   channel.send({ embeds: [embed] }).then((msg) => {
     setInterval(async () => {
       let all = [];
+      let expressStatus = []; 
 
       client.manager.nodesMap.forEach(async (node) => {
         let color;
@@ -59,8 +60,37 @@ module.exports = async (client) => {
             Math.round(node.stats.cpu.lavalinkLoad * 100) / 100
           ).toFixed(2)}%`
         );
+
         all.push(info.join("\n"));
+        expressStatus.push({
+          node: node.identifier,
+          status: node.connected ? "Connected" : "Disconnected",
+          players: node.stats.players,
+          activePlayers: node.stats.playingPlayers,
+          uptime: moment.duration(node.stats.uptime).format(" d [days], h [hours], m [minutes]"),
+          cores: node.stats.cpu.cores,
+          memoryUsed: prettyBytes(node.stats.memory.used),
+          memoryReservable: prettyBytes(node.stats.memory.reservable),
+          systemLoad: (Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2),
+          lavalinkLoad: (Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)
+        });
       });
+
+      if (config.webMonitor === true) {
+      fetch('http://localhost:3000/stats', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ stats: expressStatus })
+      })
+        .then(response => {
+          if (response.ok) {
+            return response.text();
+          }
+        })
+        .catch(error => {
+          console.log('An error has occured:', error);
+        });
+      }
 
       const chunked = arrayChunker(all, 8);
       const statusembeds = [];
