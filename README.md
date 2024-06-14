@@ -1,6 +1,6 @@
 <h1 align="center">Lavalink Status</h1>
 
-<strong><p align="center">Note: This branch supports only Lavalink v3. Switch to the [main](https://github.com/shittybot/lavalink-status/tree/main) branch for Lavalink v4.</p>
+<strong><p align="center">Note: This branch supports only Lavalink v3. Switch to the [main](https://github.com/shittybot/lavalink-status/tree/main) branch for Lavalink v4.</p><p align="center">This branch is no longer maintained please swtich to main branch and use Lavalink v4</p>
 
 ## Installation Guide (Windows/VPS/Pterodactyl)
 
