@@ -77,7 +77,7 @@ module.exports = async (client) => {
       });
 
       if (config.webMonitor === true) {
-      fetch('http://localhost:3000/stats', {
+      fetch(`http://localhost:${config.expressPort}/stats`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ stats: expressStatus })
