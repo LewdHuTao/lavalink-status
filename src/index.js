@@ -1,7 +1,7 @@
 const { Client, GatewayIntentBits, Partials } = require("discord.js");
 const { readdirSync } = require("fs");
 const Manager = require("./wrapper/index");
-const { token, nodes, expressPort, webMonitor } = require("./config");
+const { token, nodes, expressPort, webMonitor, domain } = require("./config");
 const colors = require("colors");
 const express = require("express");
 const app = express();
@@ -43,6 +43,47 @@ if (webMonitor === true) {
   app.post("/stats", (req, res) => {
     lavalinkStats = req.body.stats;
     res.sendStatus(200);
+  });
+
+  // This is to api for badge
+  // Still in development
+  app.get("/api/v1/badge/:nodeIndex", async (req, res) => {
+    try {
+      // TODO: auto fetch domain name instead of using config to find the domain name
+      const response = await fetch(`https://${domain}/stats`);
+      const lavalinkData = await response.json();
+  
+      const nodeIndex = parseInt(req.params.nodeIndex, 10);
+  
+      if (isNaN(nodeIndex) || nodeIndex < 0 || nodeIndex >= lavalinkData.length) {
+        return res.status(400).json({
+          schemaVersion: 1,
+          label: "Players",
+          message: "Invalid node",
+          color: "red"
+        });
+      }
+  
+      const node = lavalinkData[nodeIndex];
+      const totalPlayers = node.players;
+      const activePlayers = node.activePlayers;
+      const nodeName = node.node || `Node ${nodeIndex + 1}`;
+  
+      res.json({
+        schemaVersion: 1,
+        label: nodeName,
+        message: `${activePlayers}/${totalPlayers}`,
+        color: "brightgreen"
+      });
+    } catch (error) {
+      console.error("Error fetching Lavalink stats:", error);
+      res.status(500).json({
+        schemaVersion: 1,
+        label: "Players",
+        message: "Error",
+        color: "red"
+      });
+    }
   });
 
   app.get("/", (req, res) => {
