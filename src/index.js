@@ -104,9 +104,11 @@ if (webMonitor === true) {
         throw new Error(`Failed to fetch badge from Badge.io: ${response.statusText}`);
       }
   
-      const buffer = await response.buffer();
-      res.setHeader('Content-Type', 'image/svg+xml'); 
-      res.send(buffer);
+      const arrayBuffer = await response.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+
+    res.setHeader('Content-Type', 'image/svg+xml');
+    res.send(buffer);
     } catch (error) {
       console.error("Error fetching badge image:", error);
       res.status(500).send("Error fetching badge image");
