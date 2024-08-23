@@ -65,8 +65,8 @@ if (webMonitor === true) {
       }
   
       const node = lavalinkData[nodeIndex];
-      const totalPlayers = node.players;
-      const activePlayers = node.activePlayers;
+      const totalPlayers = node.players || "0";
+      const activePlayers = node.activePlayers || "0";
       
       res.json({
         schemaVersion: 1,
@@ -104,7 +104,9 @@ if (webMonitor === true) {
         throw new Error(`Failed to fetch badge from Badge.io: ${response.statusText}`);
       }
   
-      response.body.pipe(res);
+      const buffer = await response.buffer();
+      res.setHeader('Content-Type', 'image/svg+xml'); 
+      res.send(buffer);
     } catch (error) {
       console.error("Error fetching badge image:", error);
       res.status(500).send("Error fetching badge image");
