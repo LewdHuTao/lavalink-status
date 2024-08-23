@@ -47,7 +47,7 @@ if (webMonitor === true) {
 
   // This is to api for badge
   // Still in development
-  app.get("/api/v1/badge/:nodeIndex", async (req, res) => {
+  app.get("/api/v1/badge-json/:nodeIndex", async (req, res) => {
     try {
       // TODO: auto fetch domain name instead of using config to find the domain name
       const response = await fetch(`https://${domain}/stats`);
@@ -67,11 +67,10 @@ if (webMonitor === true) {
       const node = lavalinkData[nodeIndex];
       const totalPlayers = node.players;
       const activePlayers = node.activePlayers;
-      const nodeName = node.node || `Node ${nodeIndex + 1}`;
-  
+      
       res.json({
         schemaVersion: 1,
-        label: nodeName,
+        label: "Players",
         message: `${activePlayers}/${totalPlayers}`,
         color: "brightgreen"
       });
@@ -83,6 +82,32 @@ if (webMonitor === true) {
         message: "Error",
         color: "red"
       });
+    }
+  });
+
+
+  // Same still in development
+  // TODO: Cleanup the code. Make the server code in seperate file
+  app.get("/api/v1/badge/:nodeIndex", async (req, res) => {
+    try {
+      const nodeIndex = parseInt(req.params.nodeIndex, 10);
+      
+      if (isNaN(nodeIndex) || nodeIndex < 0) {
+        return res.status(400).send("Invalid node index");
+      }
+  
+      const badgeURL = `https://img.shields.io/endpoint?url=https://${domain}/api/v1/badge-json/${nodeIndex}`;
+  
+      const response = await fetch(badgeURL);
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch badge from Badge.io: ${response.statusText}`);
+      }
+  
+      response.body.pipe(res);
+    } catch (error) {
+      console.error("Error fetching badge image:", error);
+      res.status(500).send("Error fetching badge image");
     }
   });
 
