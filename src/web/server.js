@@ -1,5 +1,5 @@
 const express = require("express");
-const { expressPort } = require("../config");
+const config = require("../config");
 const stats = require("./stats/router");
 const badge_players = require("./api/v1/badge/router");
 const badge_status = require("./api/v1/status/router");
@@ -18,5 +18,5 @@ app.get("/", (req, res) => {
 });
 
 app.listen(process.env.EXPRESS_PORT || 3000, () => {
-  console.log(colors.green(`[WEB-MONITOR] Server is listening at http://localhost:${expressPort || 3000}`));
+  console.log(colors.green(`[WEB-MONITOR] Server is listening at http://localhost:${config.expressPort || 3000}`));
 });
