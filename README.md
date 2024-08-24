@@ -49,3 +49,29 @@
 ### Web Monitor Preview
 
 ![Web Monitor Preview](assets/image.png)
+
+### Badge Icon
+
+You can embed these badge icons in any .md file to show your node status or node players.
+
+- Preview
+<br>
+![Node Status](https://lavalink.shittybot.xyz/api/v1/badge/status/3) ![Node Players](https://lavalink.shittybot.xyz/api/v1/badge/players/3)
+
+- Endpoints
+
+1. Status Icon enpoint
+
+```
+GET /api/v1/badge/status/:nodeIndex
+```
+
+Replace :nodeIndex with the index of the node you want to retrieve the status for.
+
+2. Players Icon enpoints
+
+```
+GET /api/v1/badge/players/:nodeIndex
+```
+
+Replace :nodeIndex with the index of the node you want to retrieve the status for.
