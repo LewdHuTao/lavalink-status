@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/api/v1/badge-json/:nodeIndex", async (req, res) => {
+router.get("/api/v1/badge/players-json/:nodeIndex", async (req, res) => {
   try {
     const domain = req.protocol + "://" + req.get("host");
 
@@ -47,7 +47,7 @@ router.get("/api/v1/badge-json/:nodeIndex", async (req, res) => {
   }
 });
 
-router.get("/api/v1/badge/:nodeIndex", async (req, res) => {
+router.get("/api/v1/badge/players/:nodeIndex", async (req, res) => {
     try {
       const nodeIndex = parseInt(req.params.nodeIndex, 10);
   
@@ -57,7 +57,7 @@ router.get("/api/v1/badge/:nodeIndex", async (req, res) => {
   
       const domain = req.protocol + "://" + req.get("host");
   
-      const badgeURL = `https://img.shields.io/endpoint?url=${domain}/api/v1/badge-json/${nodeIndex}`;
+      const badgeURL = `https://img.shields.io/endpoint?url=${domain}/api/v1/badge/players-json/${nodeIndex}`;
   
       const response = await fetch(badgeURL);
   

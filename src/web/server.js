@@ -1,8 +1,8 @@
 const express = require("express");
 const { expressPort } = require("../config");
 const stats = require("./stats/router");
-const badge_players = require("./api/v1/badge/router");
-const badge_status = require("./api/v1/status/router");
+const badge_players = require("./api/v1/badge/players/router");
+const badge_status = require("./api/v1/badge/status/router");
 const colors = require("colors");
 
 const app = express();

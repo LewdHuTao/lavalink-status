@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-router.get("/api/v1/status-json/:nodeIndex", async (req, res) => {
+router.get("/api/v1/badge/status-json/:nodeIndex", async (req, res) => {
   try {
     const domain = req.protocol + "://" + req.get("host");
 
@@ -48,7 +48,7 @@ router.get("/api/v1/status-json/:nodeIndex", async (req, res) => {
   }
 });
 
-router.get("/api/v1/status/:nodeIndex", async (req, res) => {
+router.get("/api/v1/badge/status/:nodeIndex", async (req, res) => {
     try {
         const nodeIndex = parseInt(req.params.nodeIndex, 10);
     
@@ -59,7 +59,7 @@ router.get("/api/v1/status/:nodeIndex", async (req, res) => {
         const domain = req.protocol + "://" + req.get("host");
         console.log(domain)
     
-        const badgeURL = `https://img.shields.io/endpoint?url=${domain}/api/v1/status-json/${nodeIndex}`;
+        const badgeURL = `https://img.shields.io/endpoint?url=${domain}/api/v1/badge/status-json/${nodeIndex}`;
     
         const response = await fetch(badgeURL);
     
