@@ -118,6 +118,8 @@ module.exports = async (client) => {
     msg.edit({ embeds: statusembeds });
   };
 
+  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+  await delay(10000)
   await updateLavalinkStats();
 
   setInterval(updateLavalinkStats, 60000);
