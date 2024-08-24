@@ -58,9 +58,9 @@ You can embed these badge icons in any .md file to show your node status or node
 <br>
 ![Node Status](https://lavalink.shittybot.xyz/api/v1/badge/status/3) ![Node Players](https://lavalink.shittybot.xyz/api/v1/badge/players/3)
 
-- Endpoints
+- Endpoints:
 
-1. Status Icon enpoint
+1. Status Icon enpoint:
 
 ```
 GET /api/v1/badge/status/:nodeIndex
@@ -68,7 +68,7 @@ GET /api/v1/badge/status/:nodeIndex
 
 Replace :nodeIndex with the index of the node you want to retrieve the status for.
 
-2. Players Icon enpoints
+2. Players Icon enpoint:
 
 ```
 GET /api/v1/badge/players/:nodeIndex
