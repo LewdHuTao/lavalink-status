@@ -19,100 +19,108 @@ module.exports = async (client) => {
     .setDescription("Fetching Stats From Lavalink Server");
 
   channel.bulkDelete(1);
-  channel.send({ embeds: [embed] }).then((msg) => {
-    setInterval(async () => {
-      let all = [];
-      let expressStatus = []; 
+  const msg = await channel.send({ embeds: [embed] });
 
-      client.manager.nodesMap.forEach(async (node) => {
-        let color;
+  const updateLavalinkStats = async () => {
+    let all = [];
+    let expressStatus = [];
 
-        if (!node.connected) color = "-";
-        else color = "+";
+    client.manager.nodesMap.forEach((node) => {
+      let color = node.connected ? "+" : "-";
 
-        let info = [];
-        info.push(`${color} Node          :: ${node.identifier}`);
-        info.push(
-          `${color} Status        :: ${
-            node.connected ? "Connected [🟢]" : "Disconnected [🔴]"
-          }`
-        );
-        info.push(`${color} Player        :: ${node.stats.players}`);
-        info.push(`${color} Active Player :: ${node.stats.playingPlayers}`);
-        info.push(
-          `${color} Uptime        :: ${moment
-            .duration(node.stats.uptime)
-            .format(" d [days], h [hours], m [minutes]")}`
-        );
-        info.push(`${color} Cores         :: ${node.stats.cpu.cores} Core(s)`);
-        info.push(
-          `${color} Memory Usage  :: ${prettyBytes(
-            node.stats.memory.used
-          )}/${prettyBytes(node.stats.memory.reservable)}`
-        );
-        info.push(
-          `${color} System Load   :: ${(
-            Math.round(node.stats.cpu.systemLoad * 100) / 100
-          ).toFixed(2)}%`
-        );
-        info.push(
-          `${color} Lavalink Load :: ${(
-            Math.round(node.stats.cpu.lavalinkLoad * 100) / 100
-          ).toFixed(2)}%`
-        );
+      let info = [];
+      info.push(`${color} Node          :: ${node.identifier}`);
+      info.push(
+        `${color} Status        :: ${
+          node.connected ? "Connected [🟢]" : "Disconnected [🔴]"
+        }`
+      );
+      info.push(`${color} Player        :: ${node.stats.players}`);
+      info.push(`${color} Active Player :: ${node.stats.playingPlayers}`);
+      info.push(
+        `${color} Uptime        :: ${moment
+          .duration(node.stats.uptime)
+          .format(" d [days], h [hours], m [minutes]")}`
+      );
+      info.push(`${color} Cores         :: ${node.stats.cpu.cores} Core(s)`);
+      info.push(
+        `${color} Memory Usage  :: ${prettyBytes(
+          node.stats.memory.used
+        )}/${prettyBytes(node.stats.memory.reservable)}`
+      );
+      info.push(
+        `${color} System Load   :: ${(
+          Math.round(node.stats.cpu.systemLoad * 100) / 100
+        ).toFixed(2)}%`
+      );
+      info.push(
+        `${color} Lavalink Load :: ${(
+          Math.round(node.stats.cpu.lavalinkLoad * 100) / 100
+        ).toFixed(2)}%`
+      );
 
-        all.push(info.join("\n"));
-        expressStatus.push({
-          node: node.identifier,
-          status: node.connected ? "Connected" : "Disconnected",
-          players: node.stats.players,
-          activePlayers: node.stats.playingPlayers,
-          uptime: moment.duration(node.stats.uptime).format(" d [days], h [hours], m [minutes]"),
-          cores: node.stats.cpu.cores,
-          memoryUsed: prettyBytes(node.stats.memory.used),
-          memoryReservable: prettyBytes(node.stats.memory.reservable),
-          systemLoad: (Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2),
-          lavalinkLoad: (Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)
-        });
+      all.push(info.join("\n"));
+      expressStatus.push({
+        node: node.identifier,
+        online: node.connected ? true : false,
+        status: node.connected ? "Connected" : "Disconnected",
+        players: node.stats.players,
+        activePlayers: node.stats.playingPlayers,
+        uptime: moment
+          .duration(node.stats.uptime)
+          .format(" d [days], h [hours], m [minutes]"),
+        cores: node.stats.cpu.cores,
+        memoryUsed: prettyBytes(node.stats.memory.used),
+        memoryReservable: prettyBytes(node.stats.memory.reservable),
+        systemLoad: (Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(
+          2
+        ),
+        lavalinkLoad: (
+          Math.round(node.stats.cpu.lavalinkLoad * 100) / 100
+        ).toFixed(2),
       });
+    });
 
-      if (config.webMonitor === true) {
+    if (config.webMonitor === true) {
       fetch(`http://localhost:${config.expressPort}/stats`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stats: expressStatus })
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ stats: expressStatus }),
       })
-        .then(response => {
+        .then((response) => {
           if (response.ok) {
             return response.text();
           }
         })
-        .catch(error => {
-          console.log('An error has occured:', error);
+        .catch((error) => {
+          console.log("An error has occurred:", error);
         });
-      }
+    }
 
-      const chunked = arrayChunker(all, 8);
-      const statusembeds = [];
+    const chunked = arrayChunker(all, 8);
+    const statusembeds = [];
 
-      chunked.forEach((data) => {
-        const rembed = new EmbedBuilder()
-          .setColor(resolveColor("#2F3136"))
-          .setAuthor({
-            name: `Lavalink Monitor`,
-            iconURL: client.user.displayAvatarURL({ forceStatic: false }),
-          })
-          .setDescription(`\`\`\`diff\n${data.join("\n\n")}\`\`\``)
-          .setFooter({
-            text: "Last Update",
-          })
-          .setTimestamp(Date.now());
-        statusembeds.push(rembed);
-      });
+    chunked.forEach((data) => {
+      const rembed = new EmbedBuilder()
+        .setColor(resolveColor("#2F3136"))
+        .setAuthor({
+          name: `Lavalink Monitor`,
+          iconURL: client.user.displayAvatarURL({ forceStatic: false }),
+        })
+        .setDescription(`\`\`\`diff\n${data.join("\n\n")}\`\`\``)
+        .setFooter({
+          text: "Last Update",
+        })
+        .setTimestamp(Date.now());
+      statusembeds.push(rembed);
+    });
 
-      msg.edit({ embeds: statusembeds });
-    }, 60000);
-  });
+    msg.edit({ embeds: statusembeds });
+  };
+
+  await updateLavalinkStats();
+
+  setInterval(updateLavalinkStats, 60000);
 
   client.user.setPresence({
     status: "online",
