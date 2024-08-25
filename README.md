@@ -55,8 +55,10 @@
 You can embed these badge icons in any .md file to show your node status or node players.
 
 - Preview
+
+![Node Status](https://lavalink.shittybot.xyz/api/v1/badge/status/3) 
 <br>
-![Node Status](https://lavalink.shittybot.xyz/api/v1/badge/status/3) ![Node Players](https://lavalink.shittybot.xyz/api/v1/badge/players/3)
+![Node Players](https://lavalink.shittybot.xyz/api/v1/badge/players/3)
 
 - Endpoints:
 
