@@ -22,6 +22,10 @@
             color: #ffffff;
         }
 
+        .dark-mode .pre-wrap {
+            background-color: #444444;
+        }
+
         .hidden {
             display: none;
         }
@@ -29,6 +33,52 @@
         .loading {
             text-align: center;
             margin-top: 20px;
+        }
+
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 50;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 500px;
+            max-height: 80%;
+            overflow-y: auto;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .dark-mode .modal-content {
+            background: #333333;
+        }
+
+        .pre-wrap {
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+        }
+
+        .close-modal {
+            cursor: pointer;
+            float: right;
+            font-size: 35px;
+            font-weight: bold;
+            margin-top: -12px;
+        }
+
+        .close-modal:hover {
+            color: #9BA2AE;
         }
     </style>
 </head>
@@ -50,14 +100,21 @@
     </nav>
 
     <div class="container mx-auto pt-20">
-        <div id="loading" class="loading tfont-semibold text-lg text-center">Fetching stats...</div>
+        <div id="loading" class="loading font-semibold text-lg text-center">Fetching stats...</div>
         <div id="refresh-notice" class="refresh-notice font-semibold text-lg text-center mt-4">This page reloads every 1
             minute.</div>
         <div id="stats" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6"></div>
     </div>
 
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-modal">&times;</span>
+            <div id="modal-details"></div>
+        </div>
+    </div>
+
     <footer>
-        <div class="card mt-5 p-3 bg-white">
+        <div class="card mt-10 p-3 bg-white">
             <p class="text-center text-lg font-semibold">Made with ❤️ by <a href="https://github.com/LewdHuTao"
                     class="text-blue-600">LewdHuTao</a></p>
         </div>
@@ -68,6 +125,9 @@
         document.addEventListener('DOMContentLoaded', () => {
             const themeToggleBtn = document.getElementById('theme-toggle');
             const icon = themeToggleBtn.querySelector('i');
+            const modal = document.getElementById('modal');
+            const closeModalBtn = document.querySelector('.close-modal');
+            const modalDetails = document.getElementById('modal-details');
 
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -87,57 +147,106 @@
                     localStorage.setItem('theme', 'light');
                 }
             });
-        });
 
-        async function fetchStats() {
-            try {
-                const response = await fetch('/stats');
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
+            closeModalBtn.addEventListener('click', () => {
+                modal.classList.add('hidden');
+                modal.style.display = 'none';
+            });
+
+            modal.addEventListener('click', (event) => {
+                // Close modal if the click is on the modal backdrop (not the content)
+                if (event.target === modal) {
+                    modal.classList.add('hidden');
+                    modal.style.display = 'none';
                 }
-                const stats = await response.json();
-                const statsDiv = document.getElementById('stats');
-                const loadingDiv = document.getElementById('loading');
-                const refreshNoticeDiv = document.getElementById('refresh-notice');
+            });
 
-                if (Object.keys(stats).length === 0) {
-                    loadingDiv.classList.remove('hidden');
-                    refreshNoticeDiv.classList.add('hidden');
-                } else {
-                    loadingDiv.classList.add('hidden');
-                    refreshNoticeDiv.classList.remove('hidden');
-                    statsDiv.innerHTML = '';
+            async function fetchNodeInfo(nodeIndex) {
+                try {
+                    const response = await fetch(`/info`);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const info = await response.json();
+                    return info[nodeIndex];
+                } catch (error) {
+                    console.error('Error fetching node info:', error);
+                    return null;
+                }
+            }
 
-                    stats.forEach(stat => {
-                        const statElement = document.createElement('div');
-                        statElement.className = "card bg-white p-4 rounded shadow-lg mx-3 mt-5 transform transition-transform hover:-translate-y-1 hover:shadow-2xl dark:hover:shadow-[0_4px_15px_rgba(255,255,255,0.2)]";
-                        statElement.innerHTML = `
-    <div class="card-body">
-        <p class="font-bold text-2xl mt-2 mb-3 border-b-2 border-gray-700 pb-2">
+            async function fetchStats() {
+                try {
+                    const response = await fetch('/stats');
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const stats = await response.json();
+                    const statsDiv = document.getElementById('stats');
+                    const loadingDiv = document.getElementById('loading');
+                    const refreshNoticeDiv = document.getElementById('refresh-notice');
+
+                    if (Object.keys(stats).length === 0) {
+                        loadingDiv.classList.remove('hidden');
+                        refreshNoticeDiv.classList.add('hidden');
+                    } else {
+                        loadingDiv.classList.add('hidden');
+                        refreshNoticeDiv.classList.remove('hidden');
+                        statsDiv.innerHTML = '';
+
+                        stats.forEach((stat, index) => {
+                            const statElement = document.createElement('div');
+                            statElement.className = "card bg-white p-4 rounded shadow-lg mx-3 mt-5 transform transition-transform hover:-translate-y-1 hover:shadow-2xl dark:hover:shadow-[0_4px_15px_rgba(255,255,255,0.2)] cursor-pointer";
+                            statElement.innerHTML = `
+        <div class="card-body">
+            <p class="font-bold text-2xl mt-2 mb-3 border-b-2 border-gray-700 pb-2">
             ${stat.node}
             <span class="inline-block w-4 h-4 rounded-full ml-2 ${stat.online === true ? 'bg-green-500 animate-pulse' : 'bg-red-500 animate-pulse'}"></span>
         </p>
-        <p class="card-text"><strong>Status:</strong> ${stat.status}</p>
-        <p class="card-text"><strong>Players:</strong> ${stat.players}</p>
-        <p class="card-text"><strong>Active Players:</strong> ${stat.activePlayers}</p>
-        <p class="card-text"><strong>Uptime:</strong> ${stat.uptime}</p>
-        <p class="card-text"><strong>Cores:</strong> ${stat.cores}</p>
-        <p class="card-text"><strong>Memory Used:</strong> ${stat.memoryUsed}</p>
-        <p class="card-text"><strong>Memory Reservable:</strong> ${stat.memoryReservable}</p>
-        <p class="card-text"><strong>System Load:</strong> ${stat.systemLoad}%</p>
-        <p class="card-text"><strong>Lavalink Load:</strong> ${stat.lavalinkLoad}%</p>
-    </div>
-`;
-                        statsDiv.appendChild(statElement);
-                    });
-                }
-            } catch (error) {
-                console.error('Error fetching stats:', error);
-            }
-        }
+            <p class="card-text"><strong>Status:</strong> ${stat.status}</p>
+            <p class="card-text"><strong>Players:</strong> ${stat.activePlayers}/${stat.players}</p>
+            <p class="card-text"><strong>Uptime:</strong> ${stat.uptime}</p>
+            <p class="card-text"><strong>Cores:</strong> ${stat.cores}</p>
+            <p class="card-text"><strong>Memory Usage:</strong> ${stat.memoryUsed}/${stat.memoryReservable}</p>
+            <p class="card-text"><strong>System Load:</strong> ${stat.systemLoad}%</p>
+            <p class="card-text"><strong>Lavalink Load:</strong> ${stat.lavalinkLoad}%</p>
+        </div>
+    `;
 
-        setInterval(fetchStats, 60000);
-        fetchStats();
+                            function capitalizeFirstLetter(string) {
+                                return string.charAt(0).toUpperCase() + string.slice(1);
+                            }
+
+                            statElement.addEventListener('click', async () => {
+                                const nodeInfo = await fetchNodeInfo(index);
+                                if (nodeInfo) {
+                                    modalDetails.innerHTML = `
+            <h2 class="text-xl font-bold mb-4">Node Details: ${stat.node}</h2>
+<p><strong>Lavalink Version:</strong> <pre class="pre-wrap bg-gray-300 p-2 rounded rounded-md">${nodeInfo.version?.semver || "Unknown"}</pre></p>
+<p><strong>Lavaplayer Version:</strong> <pre class="pre-wrap bg-gray-300 p-2 rounded rounded-md">${nodeInfo.lavaplayer || "Unknown"}</pre></p>
+<p><strong>Plugins:</strong> <pre class="pre-wrap bg-gray-300 p-2 rounded rounded-md">${(nodeInfo.plugins?.map(p => `${p.name} v${p.version}`).join(', ') || "Unknown")}</pre></p>
+<p><strong>Sources:</strong> <pre class="pre-wrap bg-gray-300 p-2 rounded rounded-md">${nodeInfo.sourceManagers?.map(source => capitalizeFirstLetter(source)).join(', ') || "Unknown"}</pre></p>
+<p><strong>Filters:</strong> <pre class="pre-wrap bg-gray-300 p-2 rounded rounded-md">${nodeInfo.filters?.map(filter => capitalizeFirstLetter(filter)).join(', ') || "Unknown"}</pre></p>
+
+            `;
+                                } else {
+                                    modalDetails.innerHTML = '<p>Error fetching node details.</p>';
+                                }
+                                modal.classList.remove('hidden');
+                                modal.style.display = 'flex';
+                            });
+
+                            statsDiv.appendChild(statElement);
+                        });
+                    }
+                } catch (error) {
+                    console.error('Error fetching stats:', error);
+                }
+            }
+
+            setInterval(fetchStats, 60000);
+            fetchStats();
+        });
     </script>
 </body>
 
