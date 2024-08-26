@@ -35,8 +35,9 @@ module.exports = async (client) => {
           node.connected ? "Connected [🟢]" : "Disconnected [🔴]"
         }`
       );
-      info.push(`${color} Player        :: ${node.stats.players}`);
-      info.push(`${color} Active Player :: ${node.stats.playingPlayers}`);
+      info.push(
+        `${color} Players       :: ${node.stats.playingPlayers}/${node.stats.players}`
+      );
       info.push(
         `${color} Uptime        :: ${moment
           .duration(node.stats.uptime)
@@ -118,8 +119,8 @@ module.exports = async (client) => {
     msg.edit({ embeds: statusembeds });
   };
 
-  const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-  await delay(10000)
+  const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+  await delay(10000);
   await updateLavalinkStats();
 
   setInterval(updateLavalinkStats, 60000);
