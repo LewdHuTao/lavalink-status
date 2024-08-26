@@ -37,6 +37,8 @@
 
 ## Web Monitor
 
+- Preview: https://lavalink.shittybot.xyz
+
 1. **Enable Web Monitor**:
     - Set `webMonitor` to `true` in the [config.js](https://github.com/LewdHuTao/Lavalink-Status/blob/main/src/config.js) file.
 
