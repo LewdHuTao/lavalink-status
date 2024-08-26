@@ -50,11 +50,18 @@
     </nav>
 
     <div class="container mx-auto pt-20">
-        <div id="loading" class="loading text-center text-lg">Fetching stats...</div>
-        <div id="refresh-notice" class="refresh-notice hidden text-center text-sm mt-4">This page reloads every 1
+        <div id="loading" class="loading tfont-semibold text-lg text-center">Fetching stats...</div>
+        <div id="refresh-notice" class="refresh-notice font-semibold text-lg text-center mt-4">This page reloads every 1
             minute.</div>
         <div id="stats" class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6"></div>
     </div>
+
+    <footer>
+        <div class="card mt-5 p-3 bg-white">
+            <p class="text-center text-lg font-semibold">Made with ❤️ by <a href="https://github.com/LewdHuTao"
+                    class="text-blue-600">LewdHuTao</a></p>
+        </div>
+    </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2" defer></script>
     <script>
@@ -89,7 +96,6 @@
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
                 const stats = await response.json();
-
                 const statsDiv = document.getElementById('stats');
                 const loadingDiv = document.getElementById('loading');
                 const refreshNoticeDiv = document.getElementById('refresh-notice');
@@ -104,21 +110,24 @@
 
                     stats.forEach(stat => {
                         const statElement = document.createElement('div');
-                        statElement.className = "card bg-white p-4 rounded shadow mx-3 mt-5";
+                        statElement.className = "card bg-white p-4 rounded shadow-lg mx-3 mt-5 transform transition-transform hover:-translate-y-1 hover:shadow-2xl dark:hover:shadow-[0_4px_15px_rgba(255,255,255,0.2)]";
                         statElement.innerHTML = `
-                            <div class="card-body">
-                                <h5 class="card-title font-semibold">Node: ${stat.node}</h5>
-                                <p class="card-text"><strong>Status:</strong> ${stat.status}</p>
-                                <p class="card-text"><strong>Players:</strong> ${stat.players}</p>
-                                <p class="card-text"><strong>Active Players:</strong> ${stat.activePlayers}</p>
-                                <p class="card-text"><strong>Uptime:</strong> ${stat.uptime}</p>
-                                <p class="card-text"><strong>Cores:</strong> ${stat.cores}</p>
-                                <p class="card-text"><strong>Memory Used:</strong> ${stat.memoryUsed}</p>
-                                <p class="card-text"><strong>Memory Reservable:</strong> ${stat.memoryReservable}</p>
-                                <p class="card-text"><strong>System Load:</strong> ${stat.systemLoad}%</p>
-                                <p class="card-text"><strong>Lavalink Load:</strong> ${stat.lavalinkLoad}%</p>
-                            </div>
-                        `;
+    <div class="card-body">
+        <p class="font-bold text-2xl mt-2 mb-3 border-b-2 border-gray-700 pb-2">
+            ${stat.node}
+            <span class="inline-block w-4 h-4 rounded-full ml-2 ${stat.online === true ? 'bg-green-500 animate-pulse' : 'bg-red-500 animate-pulse'}"></span>
+        </p>
+        <p class="card-text"><strong>Status:</strong> ${stat.status}</p>
+        <p class="card-text"><strong>Players:</strong> ${stat.players}</p>
+        <p class="card-text"><strong>Active Players:</strong> ${stat.activePlayers}</p>
+        <p class="card-text"><strong>Uptime:</strong> ${stat.uptime}</p>
+        <p class="card-text"><strong>Cores:</strong> ${stat.cores}</p>
+        <p class="card-text"><strong>Memory Used:</strong> ${stat.memoryUsed}</p>
+        <p class="card-text"><strong>Memory Reservable:</strong> ${stat.memoryReservable}</p>
+        <p class="card-text"><strong>System Load:</strong> ${stat.systemLoad}%</p>
+        <p class="card-text"><strong>Lavalink Load:</strong> ${stat.lavalinkLoad}%</p>
+    </div>
+`;
                         statsDiv.appendChild(statElement);
                     });
                 }
