@@ -8,8 +8,6 @@ router.get("/api/v1/badge/status-json/:nodeIndex", async (req, res) => {
     const response = await fetch(`${domain}/stats`);
     const lavalinkData = await response.json();
 
-    console.log(lavalinkData)
-
     const nodeIndex = parseInt(req.params.nodeIndex, 10);
     if (isNaN(nodeIndex) || nodeIndex < 0 || nodeIndex >= lavalinkData.length) {
       return res.status(400).json({
