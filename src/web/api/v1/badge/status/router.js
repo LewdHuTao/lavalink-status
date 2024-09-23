@@ -1,3 +1,4 @@
+const { BadgeGenerator } = require("../../../../utils/BadgeGenerator");
 const express = require("express");
 const router = express.Router();
 
@@ -11,10 +12,9 @@ router.get("/api/v1/badge/status-json/:nodeIndex", async (req, res) => {
     const nodeIndex = parseInt(req.params.nodeIndex, 10);
     if (isNaN(nodeIndex) || nodeIndex < 0 || nodeIndex >= lavalinkData.length) {
       return res.status(400).json({
-        schemaVersion: 1,
         label: "Error",
         message: "Invalid node",
-        color: "red",
+        color: "#DA644D",
       });
     }
 
@@ -22,26 +22,23 @@ router.get("/api/v1/badge/status-json/:nodeIndex", async (req, res) => {
 
     if (node.online === true) {
         res.json({
-            schemaVersion: 1,
-            label: "Status",
+            label: "🚦 Status",
             message: "Online",
-            color: "brightgreen"
+            color: "#4FC921"
         })
     } else {
         res.json({
-            schemaVersion: 1,
-            label: "Status",
+            label: "🚦 Status",
             message: "Offline",
-            color: "red"
+            color: "#DA644D"
         })
     }
   } catch (error) {
     console.error("Error fetching Lavalink stats:", error);
     res.status(500).json({
-        schemaVersion: 1,
-        label: "Status",
+        label: "🚦 Status",
         message: "Offline",
-        color: "Red"
+        color: "#DA644D"
     });
   }
 });
@@ -54,18 +51,21 @@ router.get("/api/v1/badge/status/:nodeIndex", async (req, res) => {
           return res.status(400).send("Invalid node index");
         }
     
-        const domain = req.protocol + "://" + req.get("host");    
-        const badgeURL = `https://img.shields.io/endpoint?url=${domain}/api/v1/badge/status-json/${nodeIndex}`;
+        const domain = req.protocol + "://" + req.get("host");
+        const response = await fetch(`${domain}/api/v1/badge/status-json/${nodeIndex}`);
+        const badgeData = await response.json();
     
-        const response = await fetch(badgeURL);
-    
-        if (!response.ok) throw new Error(`Failed to fetch badge: ${response.statusText}`);
-    
-        const arrayBuffer = await response.arrayBuffer();
-        const buffer = Buffer.from(arrayBuffer);
+        const svg = await BadgeGenerator({
+          labelBlockColor: "#2C3E50",
+          labelText: badgeData.label,
+          labelColor: "#ECF0F1",
+          valueBlockColor: badgeData.color,
+          valueText: badgeData.message,
+          valueColor: "#FFFFFF"
+        })
     
         res.setHeader("Content-Type", "image/svg+xml");
-        res.send(buffer);
+        res.send(svg);
       } catch (error) {
         console.error("Error fetching badge image:", error);
         res.status(500).send("Error fetching badge image");
