@@ -24,7 +24,7 @@ router.get("/api/v1/badge/uptime-json/:nodeIndex", async (req, res) => {
         res.json({
             label: "⏳ Uptime",
             message: node.uptime.split(',')[0],
-            color: "#0778B9"
+            color: "#1284C5"
         })
     } else {
         res.json({
@@ -66,7 +66,6 @@ router.get("/api/v1/badge/uptime/:nodeIndex", async (req, res) => {
 
     res.setHeader("Content-Type", "image/svg+xml");
     res.send(svg);
-
   } catch (error) {
     console.error("Error generating badge:", error);
     res.status(500).send("Error generating badge");
