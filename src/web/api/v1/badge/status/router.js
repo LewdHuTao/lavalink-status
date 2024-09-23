@@ -54,9 +54,7 @@ router.get("/api/v1/badge/status/:nodeIndex", async (req, res) => {
           return res.status(400).send("Invalid node index");
         }
     
-        const domain = req.protocol + "://" + req.get("host");
-        console.log(domain)
-    
+        const domain = req.protocol + "://" + req.get("host");    
         const badgeURL = `https://img.shields.io/endpoint?url=${domain}/api/v1/badge/status-json/${nodeIndex}`;
     
         const response = await fetch(badgeURL);
