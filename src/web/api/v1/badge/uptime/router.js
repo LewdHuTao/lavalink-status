@@ -21,24 +21,24 @@ router.get("/api/v1/badge/uptime-json/:nodeIndex", async (req, res) => {
     const node = lavalinkData[nodeIndex];
 
     if (node.online === true) {
-        res.json({
-            label: "⏳ Uptime",
-            message: node.uptime.split(',')[0],
-            color: "#1284C5"
-        })
+      res.json({
+        label: "⏳ Uptime",
+        message: node.uptime.split(",")[0],
+        color: "#1284C5",
+      });
     } else {
-        res.json({
-            label: "⏳ Uptime",
-            message: "N/A",
-            color: "#DA644D"
-        })
+      res.json({
+        label: "⏳ Uptime",
+        message: "N/A",
+        color: "#DA644D",
+      });
     }
   } catch (error) {
     console.error("Error fetching Lavalink stats:", error);
     res.status(500).json({
-        label: "⏳ Uptime",
-        message: "N/A",
-        color: "#DA644D"
+      label: "⏳ Uptime",
+      message: "N/A",
+      color: "#DA644D",
     });
   }
 });
@@ -52,7 +52,9 @@ router.get("/api/v1/badge/uptime/:nodeIndex", async (req, res) => {
     }
 
     const domain = req.protocol + "://" + req.get("host");
-    const response = await fetch(`${domain}/api/v1/badge/uptime-json/${nodeIndex}`);
+    const response = await fetch(
+      `${domain}/api/v1/badge/uptime-json/${nodeIndex}`
+    );
     const badgeData = await response.json();
 
     const svg = await BadgeGenerator({
@@ -61,8 +63,8 @@ router.get("/api/v1/badge/uptime/:nodeIndex", async (req, res) => {
       labelColor: "#ECF0F1",
       valueBlockColor: badgeData.color,
       valueText: badgeData.message,
-      valueColor: "#FFFFFF"
-    })
+      valueColor: "#FFFFFF",
+    });
 
     res.setHeader("Content-Type", "image/svg+xml");
     res.send(svg);
