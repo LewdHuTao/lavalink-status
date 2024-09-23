@@ -1,6 +1,6 @@
 {
   "name": "lavalink-status",
-  "version": "1.2.0",
+  "version": "1.2.5",
   "description": "Monitor your lavalink",
   "main": "src/index.js",
   "scripts": {
