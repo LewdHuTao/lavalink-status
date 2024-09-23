@@ -14,7 +14,7 @@ router.get("/api/v1/badge/uptime-json/:nodeIndex", async (req, res) => {
       return res.status(400).json({
         label: "Error",
         message: "Invalid node",
-        color: "red",
+        color: "#DA644D",
       });
     }
 
